@@ -1,0 +1,119 @@
+/* Portfolio/SIPA/courses/static/courses/css/home.css */
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #6a1b9a 25%, #ab47bc 75%);
+    color: #fff;
+    transition: opacity 0.5s ease-out; /* Add this line for the transition */
+}
+
+body.fade-out {
+    opacity: 0; /* Add this line for the transition */
+}
+
+h1 {
+    color: #fff;
+    text-align: center;
+    font-size: 4em;
+    margin-bottom: 20px;
+    animation: fadeInDown 2s ease-in-out;
+}
+
+p {
+    font-size: 1.2em;
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeIn 3s ease-in-out;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+    animation: fadeInUp 2s ease-in-out;
+}
+
+li {
+    background-color: #6a1b9a;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+li:hover {
+    transform: scale(1.1);
+    background-color: #ab47bc;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+a i {
+    margin-right: 10px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #6a1b9a;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.button:hover {
+    background-color: #ab47bc;
+    transform: scale(1.05);
+}
+
+.scroll-to-filter {
+    margin-top: 20px;
+}
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

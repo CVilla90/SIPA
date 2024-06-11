@@ -1,0 +1,51 @@
+<!-- Portfolio\SIPA\courses\templates\courses\add_course.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Course</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'courses/css/add_course.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Add a New Course</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <h2>Competencies</h2>
+        {{ formset.management_form }}
+        <div id="competencies-formset">
+            {% for form in formset %}
+                <div class="competency-form">
+                    {{ form.competency.label_tag }} {{ form.competency }}
+                    {{ form.occurrence.label_tag }} {{ form.occurrence }}
+                    <div class="delete-checkbox">{{ form.DELETE }}</div>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" id="add-competency">Add Competency</button>
+        <button type="submit">Save Course</button>
+    </form>
+    <a href="{% url 'home' %}" class="button">Back to Home</a>
+
+    <script>
+        $(document).ready(function() {
+            $('#add-competency').click(function() {
+                var formIdx = $('#id_coursecompetency_set-TOTAL_FORMS').val();
+                var newForm = $('#empty-form').html().replace(/__prefix__/g, formIdx);
+                $('#competencies-formset').append(newForm);
+                $('#id_coursecompetency_set-TOTAL_FORMS').val(parseInt(formIdx) + 1);
+            });
+        });
+    </script>
+
+    <div id="empty-form" style="display: none;">
+        <div class="competency-form">
+            {{ formset.empty_form.competency.label_tag }} {{ formset.empty_form.competency }}
+            {{ formset.empty_form.occurrence.label_tag }} {{ formset.empty_form.occurrence }}
+            <div class="delete-checkbox">{{ formset.empty_form.DELETE }}</div>
+        </div>
+    </div>
+</body>
+</html>

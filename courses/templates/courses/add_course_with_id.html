@@ -1,0 +1,55 @@
+<!-- Portfolio\SIPA\courses\templates\courses\add_course_with_id.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Competency to {{ course.name }}</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'courses/css/home.css' %}">
+    <script>
+        function addCompetencyRow(competency, occurrence) {
+            const table = document.getElementById('competencyTable');
+            const row = table.insertRow();
+            const cell1 = row.insertCell(0);
+            const cell2 = row.insertCell(1);
+            cell1.innerHTML = competency;
+            cell2.innerHTML = occurrence;
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            const competencySelect = document.getElementById('id_competency');
+            const occurrenceInput = document.getElementById('id_occurrence');
+            addCompetencyRow(competencySelect.options[competencySelect.selectedIndex].text, occurrenceInput.value);
+            competencySelect.value = '';
+            occurrenceInput.value = '';
+        }
+
+        window.onload = function() {
+            const form = document.getElementById('competencyForm');
+            form.addEventListener('submit', handleSubmit);
+        }
+    </script>
+</head>
+<body>
+    <h1>Add Competency to {{ course.name }}</h1>
+    <form id="competencyForm" method="post">
+        {% csrf_token %}
+        {{ competency_form.as_p }}
+        <button type="submit">Add Competency</button>
+    </form>
+    <table id="competencyTable">
+        <tr>
+            <th>Competency</th>
+            <th>Occurrence</th>
+        </tr>
+        {% for course_competency in course_competencies %}
+        <tr>
+            <td>{{ course_competency.competency.name }}</td>
+            <td>{{ course_competency.occurrence }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'list_courses' %}">Back to Courses</a>
+</body>
+</html>

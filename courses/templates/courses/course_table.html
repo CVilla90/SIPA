@@ -1,0 +1,34 @@
+<!-- Portfolio\SIPA\courses\templates\courses\course_table.html -->
+
+<table id="courses-table">
+    <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Hours</th>
+        <th>Credits</th>
+        <th>Semester</th>
+        <th>Major</th>
+        <th>Competencies</th>
+        <th>Actions</th>
+    </tr>
+    {% for course in courses %}
+    <tr>
+        <td>{{ course.code }}</td>
+        <td>{{ course.name }}</td>
+        <td>{{ course.hours }}</td>
+        <td>{{ course.credits }}</td>
+        <td>{{ course.semester }}</td>
+        <td>{{ course.major }}</td>
+        <td>
+            {% for course_competency in course.coursecompetency_set.all %}
+                {{ course_competency.competency.name }} ({{ course_competency.occurrence }} occurrences)<br>
+            {% empty %}
+                No competencies
+            {% endfor %}
+        </td>
+        <td>
+            <a href="{% url 'course_detail' course.id %}">View Details</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

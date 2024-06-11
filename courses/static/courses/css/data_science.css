@@ -1,0 +1,143 @@
+/* Portfolio/SIPA/courses/static/courses/css/data_science.css */
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #6a1b9a 25%, #ab47bc 75%);
+    color: #fff;
+}
+
+h1, h2 {
+    color: #fff;
+    text-align: center;
+}
+
+.filter-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #000;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.filter-section label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.filter-section select {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.filter-section button {
+    background-color: #6a1b9a;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    display: inline-block;
+}
+
+.filter-section button:hover {
+    background-color: #ab47bc;
+    transform: scale(1.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: #ffffff;
+    border-radius: 10px;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+    color: #000;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray color for even rows */
+}
+
+table tr:nth-child(odd) {
+    background-color: #ffffff; /* White color for odd rows */
+}
+
+a.button, #toggle-filters {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 20px 0;
+    background-color: #6a1b9a;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+a.button:hover, #toggle-filters:hover {
+    background-color: #ab47bc;
+    transform: scale(1.05);
+}
+
+#chart-container {
+    position: relative;
+    margin: auto;
+    height: 500px; /* Set the height you want */
+    width: 500px;  /* Set the width you want */
+}
+
+.chartjs-legend ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.chartjs-legend li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.chartjs-legend span {
+    background-color: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    margin-right: 10px;
+    width: 10px;
+}
+
+@media (max-width: 768px) {
+    .filter-section {
+        max-width: 100%;
+    }
+
+    #chart-container {
+        height: 200px;
+        width: 200px;
+    }
+
+    table, th, td {
+        font-size: 12px;
+    }
+
+    .filter-section button, a.button, #toggle-filters {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+    }
+}

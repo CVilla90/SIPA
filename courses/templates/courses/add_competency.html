@@ -1,0 +1,19 @@
+<!-- Portfolio\SIPA\courses\templates\courses\add_competency.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Competency</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'courses/css/add_competency.css' %}">
+</head>
+<body>
+    <h1>Add a New Competency</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>

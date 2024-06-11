@@ -1,0 +1,214 @@
+<!-- Portfolio\SIPA\courses\templates\courses\data_science.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Science</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'courses/css/data_science.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Data Science</h1>
+        <button id="toggle-filters" class="button">Show Filters</button>
+        <div id="filter-section" class="filter-section" style="display: none;">
+            <h2>Filter Courses</h2>
+            <form id="filter-form" class="mb-3">
+                <div class="form-group">
+                    <label for="code">Code:</label>
+                    <select id="code" name="code" class="form-control">
+                        <option value="">All</option>
+                        {% for code in codes %}
+                            <option value="{{ code }}">{{ code }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <select id="name" name="name" class="form-control">
+                        <option value="">All</option>
+                        {% for name in names %}
+                            <option value="{{ name }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="hours">Hours:</label>
+                    <select id="hours" name="hours" class="form-control">
+                        <option value="">All</option>
+                        {% for hour in hours %}
+                            <option value="{{ hour }}">{{ hour }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="credits">Credits:</label>
+                    <select id="credits" name="credits" class="form-control">
+                        <option value="">All</option>
+                        {% for credit in credits %}
+                            <option value="{{ credit }}">{{ credit }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="semester">Semester:</label>
+                    <select id="semester" name="semester" class="form-control">
+                        <option value="">All</option>
+                        {% for semester in semesters %}
+                            <option value="{{ semester }}">{{ semester }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="major">Major:</label>
+                    <select id="major" name="major" class="form-control">
+                        <option value="">All</option>
+                        {% for major in majors %}
+                            <option value="{{ major }}">{{ major }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="competency">Competency:</label>
+                    <select id="competency" name="competency" class="form-control">
+                        <option value="">All</option>
+                        {% for competency in competencies %}
+                            <option value="{{ competency.id }}">{{ competency.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="button">Filter</button>
+            </form>
+        </div>
+
+        <h2>Courses</h2>
+        <div id="courses-container">
+            {% include 'courses/course_table.html' %}
+        </div>
+
+        <a href="{% url 'home' %}" class="button">Back to Home</a>
+
+        <div class="card">
+            <div class="card-body">
+                <button id="generate-chart" class="btn btn-primary mb-3">Generate Chart</button>
+                <div id="chart-container">
+                    <canvas id="competencyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            console.log("Document ready");
+
+            $('#toggle-filters').click(function() {
+                $('#filter-section').toggle();
+                $(this).text($(this).text() === 'Show Filters' ? 'Hide Filters' : 'Show Filters');
+                console.log("Toggle filters clicked");
+            });
+
+            $('#filter-form').submit(function(e) {
+                e.preventDefault();
+                console.log("Filter form submitted");
+                $.ajax({
+                    url: "{% url 'filter_courses' %}",
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        console.log("Filter form submission successful");
+                        $('#courses-container').html(data);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("Error in filter form submission: " + textStatus, errorThrown);
+                    }
+                });
+            });
+
+            $('#generate-chart').click(function() {
+                console.log("Generate chart clicked");
+                var courses = [];
+                $('#courses-table tr').each(function() {
+                    var course = {};
+                    $(this).find('td').each(function(index) {
+                        if (index === 0) course.code = $(this).text();
+                        if (index === 1) course.name = $(this).text();
+                        if (index === 2) course.hours = parseInt($(this).text());
+                        if (index === 3) course.credits = parseInt($(this).text());
+                        if (index === 4) course.semester = $(this).text();
+                        if (index === 5) course.major = $(this).text();
+                        if (index === 6) {
+                            var competencies = [];
+                            $(this).html().split('<br>').forEach(function(competencyText) {
+                                var match = competencyText.match(/(.+?) \((\d+) occurrences\)/);
+                                if (match) {
+                                    competencies.push({name: match[1], occurrences: parseInt(match[2])});
+                                }
+                            });
+                            course.competencies = competencies;
+                        }
+                    });
+                    if (Object.keys(course).length > 0) courses.push(course);
+                });
+
+                var competencies_count = {};
+                courses.forEach(function(course) {
+                    course.competencies.forEach(function(competency) {
+                        if (competency.name in competencies_count) {
+                            competencies_count[competency.name] += competency.occurrences;
+                        } else {
+                            competencies_count[competency.name] = competency.occurrences;
+                        }
+                    });
+                });
+
+                var total = Object.values(competencies_count).reduce((a, b) => a + b, 0);
+
+                var chartData = {
+                    labels: Object.keys(competencies_count),
+                    datasets: [{
+                        data: Object.values(competencies_count),
+                        backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#ff6384', '#36a2eb'],
+                    }]
+                };
+
+                var ctx = document.getElementById('competencyChart').getContext('2d');
+                if (window.competencyChart instanceof Chart) {
+                    window.competencyChart.destroy();
+                }
+                window.competencyChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: chartData,
+                    options: {
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, context) => {
+                                    let percentage = (value / total * 100).toFixed(2) + '%';
+                                    return percentage;
+                                },
+                                color: '#fff',
+                            }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10,
+                                padding: 20,
+                                usePointStyle: true, // Use point style instead of boxes
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            });
+        });
+    </script>
+</body>
+</html>

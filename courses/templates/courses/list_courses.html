@@ -1,0 +1,20 @@
+<!-- Portfolio\SIPA\courses\templates\courses\list_courses.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Courses</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'courses/css/home.css' %}">
+</head>
+<body>
+    <h1>Courses</h1>
+    <ul>
+    {% for course in courses %}
+        <li>{{ course.name }} ({{ course.code }}) - {{ course.hours }} hours, {{ course.credits }} credits</li>
+    {% endfor %}
+    </ul>
+    <a href="{% url 'add_course' %}" class="button">Add Course</a>
+    <a href="{% url 'home' %}" class="button">Back to Home</a>
+</body>
+</html>

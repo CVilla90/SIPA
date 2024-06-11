@@ -1,0 +1,28 @@
+<!-- Portfolio\SIPA\courses\templates\home.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'courses/css/home.css' %}">
+</head>
+<body>
+    <h1>Welcome to SIPA</h1>
+    <p>Sistema para la Informatización de Programas Analíticos</p>
+    <ul>
+        <li><a href="{% url 'add_course' %}">Add Course</a></li>
+        <li><a href="{% url 'add_competency' %}">Add Competency</a></li>
+        <li><a href="#" onclick="transitionToDataScience()">Data Science</a></li>
+    </ul>
+
+    <script>
+        function transitionToDataScience() {
+            document.body.classList.add('fade-out');
+            setTimeout(function() {
+                window.location.href = "{% url 'data_science' %}";
+            }, 500); // Match this time with the CSS transition duration
+        }
+    </script>
+</body>
+</html>
